@@ -1,0 +1,39 @@
+---
+---
+- name: Configure Web Server and Deploy App
+  hosts: all
+  become: true
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install ansible
+      apt:
+        name: ansible
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: start and enable Nginx service
+      service:
+        name: ansible
+        state: started
+
+    - name: Start and enable Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Deploy Sample Web Application
+      copy:
+        src: /path/to/your/web/app
+        dest: /var/www/html/
